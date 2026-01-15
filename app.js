@@ -6,14 +6,15 @@ function loadRiceList() {
     .then(data => {
       const select = document.getElementById("rice");
       select.innerHTML = '<option value="">-- Chọn loại gạo --</option>';
+data.forEach(item => {
+  const opt = document.createElement("option");
 
-      data.forEach(item => {
-        const opt = document.createElement("option");
-        opt.value = item.name;
-        opt.textContent = item.name + " - " + item.price + "đ/kg";
-        opt.dataset.price = item.price;
-        select.appendChild(opt);
-      });
+  // ĐÚNG theo tên cột sheet của bạn
+  opt.value = item["Tên hàng"];
+  opt.textContent = item["Tên hàng"] + " - " + item["Giá mặc định"] + "đ/kg";
+  opt.dataset.price = item["Giá mặc định"];
+  select.appendChild(opt);
+});    
     })
     .catch(err => console.error("Lỗi load gạo:", err));
 }

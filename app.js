@@ -1,47 +1,52 @@
-// ===== DANH MỤC GẠO + GIÁ =====
-const riceCatalog = [
- {name:"Gạo Đài Thơm 8", price:18000},
- {name:"Gạo ST21", price:23000},
- {name:"Gạo ST25", price:30000},
- {name:"Gạo Thơm Lài Miên", price:22000},
- {name:"Gạo Đồng Nở 108", price:16000},
- {name:"Gạo Đồng Dẻo", price:17000},
- {name:"Gạo Gạch", price:18000},
- {name:"Gạo Lứt", price:30000},
- {name:"Gạo 64", price:17000},
- {name:"Gạo Hàm Châu", price:17000},
- {name:"Gạo Móng Chim", price:23000},
- {name:"Gạo Gãy", price:16000},
- {name:"Nếp", price:20000}
-];
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzk63ZP43XRP3Ej_1iR6ywLzk6AsTjZNawDH7ga1urlIhykN-2mQr7OVqqZtN1jHHzn/exec";
 
-// Load danh mục
-const riceSelect = document.getElementById("rice");
-riceCatalog.forEach(r=>{
-  let opt = document.createElement("option");
-  opt.value = r.name;
-  opt.textContent = r.name + " - " + r.price;
-  riceSelect.appendChild(opt);
-});
+function addSale() {
+  const maGao = document.getElementById("rice").value;
+  const khoiLuong = document.getElementById("qty").value;
+  const giaBan = document.getElementById("price").value || "";
+  const thanhToan = document.getElementById("payment").value;
 
-function addSale(){
-  const riceName = riceSelect.value;
-  const qty = Number(document.getElementById("qty").value);
-  const customPrice = Number(document.getElementById("price").value);
-  const payment = document.getElementById("payment").value;
+  if (!maGao || !khoiLuong) {
+    alert("Vui lòng chọn gạo và nhập khối lượng");
+    return;
+  }
 
-  if(!riceName || !qty) return alert("Nhập đủ thông tin");
+  const today = new Date();
+  const ngay = today.toLocaleDateString("vi-VN");
 
-  const rice = riceCatalog.find(r=>r.name===riceName);
-  const sellPrice = customPrice || rice.price;
-  const total = sellPrice * qty;
+  const tenGao = document.querySelector("#rice option:checked").text;
+  const giaMacDinh = document.querySelector("#rice option:checked").dataset.price || "";
+  const giaThucTe = giaBan || giaMacDinh;
+  const tongTien = Number(khoiLuong) * Number(giaThucTe);
 
-  const table = document.getElementById("table");
-  const row = table.insertRow();
-  row.insertCell(0).innerText = new Date().toLocaleDateString("vi-VN");
-  row.insertCell(1).innerText = riceName;
-  row.insertCell(2).innerText = qty;
-  row.insertCell(3).innerText = sellPrice.toLocaleString();
-  row.insertCell(4).innerText = total.toLocaleString();
-  row.insertCell(5).innerText = payment;
+  const data = {
+    maGao,
+    ngay,
+    tenGao,
+    khoiLuong,
+    giaMacDinh,
+    giaBan: giaThucTe,
+    tongTien,
+    thanhToan,
+    taiKhoan: "",
+    nguoiNhan: ""
+  };
+
+  fetch(WEB_APP_URL, {
+    method: "POST",
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(res => {
+    if (res.status === "success") {
+      alert("Đã lưu đơn vào Google Sheet!");
+      location.reload();
+    } else {
+      alert("Lỗi khi lưu dữ liệu");
+    }
+  })
+  .catch(err => {
+    alert("Không kết nối được Google Sheet");
+    console.error(err);
+  });
 }

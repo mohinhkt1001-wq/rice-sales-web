@@ -26,4 +26,33 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("price").value = price || "";
   });
 });
+document.getElementById("saveBtn").addEventListener("click", function () {
+  const riceSelect = document.getElementById("rice");
+  const kg = document.getElementById("kg").value;
+  const price = document.getElementById("price").value;
+  const payment = document.getElementById("payment").value;
+
+  if (!riceSelect.value || !kg || !price) {
+    alert("Vui lòng nhập đầy đủ thông tin!");
+    return;
+  }
+
+  const total = kg * price;
+  const today = new Date().toLocaleDateString("vi-VN");
+
+  const table = document.getElementById("orderTable");
+  const row = table.insertRow();
+
+  row.insertCell(0).innerText = today;
+  row.insertCell(1).innerText = riceSelect.value;
+  row.insertCell(2).innerText = kg;
+  row.insertCell(3).innerText = price;
+  row.insertCell(4).innerText = total;
+  row.insertCell(5).innerText = payment;
+
+  // reset form
+  document.getElementById("kg").value = "";
+  document.getElementById("price").value = "";
+  riceSelect.selectedIndex = 0;
+});
 

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Quản Lý Bán Hàng Gạo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>QUẢN LÝ BÁN HÀNG GẠO</h2>
+
+<div class="form">
+  <select id="rice">
+    <option value="">-- Chọn gạo --</option>
+  </select>
+
+  <input type="number" id="qty" placeholder="Khối lượng (kg)">
+
+  <input type="number" id="price" placeholder="Giá bán (bỏ trống = giá mặc định)">
+
+  <select id="payment">
+    <option>Tiền mặt</option>
+    <option>Chuyển khoản</option>
+    <option>Công nợ</option>
+  </select>
+
+  <button onclick="addSale()">Lưu đơn</button>
+</div>
+
+<h3>Danh sách đơn bán</h3>
+<table id="table">
+  <tr>
+    <th>Ngày</th>
+    <th>Tên gạo</th>
+    <th>Kg</th>
+    <th>Giá bán</th>
+    <th>Tổng</th>
+    <th>Thanh toán</th>
+  </tr>
+</table>
+
+<script src="app.js"></script>
+</body>
+</html>
